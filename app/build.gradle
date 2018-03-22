@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [YANDEX_CLIENT_ID:"62cef3729ae44a3c91b6043bfb650f75"] //for yandex.disk REST API
     }
     buildTypes {
         release {
@@ -20,4 +21,6 @@ android {
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0' //for navigation drawer
+    implementation "com.yandex.android:authsdk:2.1.0" //for yandex.disk REST API
 }
