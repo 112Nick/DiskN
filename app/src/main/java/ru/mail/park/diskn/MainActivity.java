@@ -23,6 +23,13 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.HashSet;
 import java.util.Set;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import ru.mail.park.diskn.APIs.RetrofitFactory;
+import ru.mail.park.diskn.APIs.YandexApi;
+import ru.mail.park.diskn.Models.Disk;
+
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 
@@ -31,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggleButton;
     private MenuItem logIn;
     private Context context;
-    YandexAuthSdk sdk;
+    private YandexAuthSdk sdk;
+    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+
 
     // TODO REQUEST_LOGIN_SDK = 0
     @Override
@@ -75,14 +84,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 0) {
             TextView txt = findViewById(R.id.txt);
-
             try {
                 final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
-
                 if (yandexAuthToken != null) {
                     // Success auth
 //                    sdk.extractToken(resultCode, data);
+                    Constants.YANDEX_OAUTH_TOKEN = yandexAuthToken.getValue();
                     txt.append("Token success: " + yandexAuthToken.getValue());
+                    makeRequest();
 
                 }
             } catch (YandexAuthException e) {
@@ -90,11 +99,31 @@ public class MainActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //                e.toString()
                 txt.append("Error");
-
             }
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void makeRequest() {
+        Callback<Disk> callback = new Callback<Disk>() {
+
+            @Override
+            public void onResponse(Call<Disk> call, Response<Disk> response) {
+                Log.d("MyTag", String.valueOf(response.body()));
+                TextView txt = findViewById(R.id.txt);
+                txt.append(String.valueOf(response.body()));
+
+            }
+
+            @Override
+            public void onFailure(Call<Disk> call, Throwable t) {
+                t.printStackTrace();
+            }
+        };
+        yandexApi.getDiskInfo().enqueue(callback);
+
+    }
+
 }
+
