@@ -2,18 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/login"
-        android:title="Yandex">
+        android:id="@+id/files"
+        android:icon="@mipmap/ic_insert_drive_file_black_24dp"
+        android:title="@string/files">
     </item>
 
     <item
-        android:id="@+id/nav_settings"
-        android:title="Second test">
+        android:id="@+id/trash"
+        android:icon="@mipmap/ic_delete_black_24dp"
+        android:title="@string/trashBin">
     </item>
 
     <item
-        android:id="@+id/nav_logout"
-        android:title="Third test">
+        android:id="@+id/settings"
+        android:icon="@mipmap/ic_settings_black_24dp"
+        android:title="@string/settings">
+    </item>
+    <item
+        android:id="@+id/accounts"
+        android:icon="@mipmap/ic_account_circle_black_24dp"
+        android:title="@string/accounts">
     </item>
 
 </menu>

@@ -14,8 +14,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="SOME SHIT"
             android:id="@+id/txt"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/txt"
+            android:id="@+id/fileList"
+            tools:listitem="@layout/item"/>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
@@ -23,7 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:menu="@menu/navigation_menu"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_header">
 
     </android.support.design.widget.NavigationView>
 

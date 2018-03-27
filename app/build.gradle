@@ -9,7 +9,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [YANDEX_CLIENT_ID:"62cef3729ae44a3c91b6043bfb650f75"] //for yandex.disk REST API
+        manifestPlaceholders = [YANDEX_CLIENT_ID: "62cef3729ae44a3c91b6043bfb650f75"]
+        //for yandex.disk REST API
     }
     buildTypes {
         release {
@@ -30,4 +31,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

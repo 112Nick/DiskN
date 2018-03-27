@@ -9,6 +9,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,9 @@ import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;
 import com.yandex.authsdk.YandexAuthToken;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -29,6 +33,9 @@ import retrofit2.Response;
 import ru.mail.park.diskn.APIs.RetrofitFactory;
 import ru.mail.park.diskn.APIs.YandexApi;
 import ru.mail.park.diskn.Models.Disk;
+import ru.mail.park.diskn.Models.Embedded;
+import ru.mail.park.diskn.Models.ResourceItem;
+import ru.mail.park.diskn.Models.Test;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
@@ -50,26 +57,21 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawerLayout);
         toggleButton = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        logIn = ((NavigationView)findViewById(R.id.nav_view)).getMenu().findItem(R.id.login);
-//
         context = this;
 
-        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
+        final RecyclerView fileListView = findViewById(R.id.fileList);
+        fileListView.setLayoutManager(new LinearLayoutManager(this));
+        final FileListAdapter adapter = new FileListAdapter(this);
+        fileListView.setAdapter(adapter);
+        fileListView.setHasFixedSize(true);
+        getDiskInfo();
+        getResourcesList();
 
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final Set<String> scopes = new HashSet<>();
-                sdk = new YandexAuthSdk(context, new YandexAuthOptions(context, true));
-                startActivityForResult(sdk.createLoginIntent(context, scopes), 0);
-                return false;
-            }
-        };
-        /////////
+
         drawerLayout.addDrawerListener(toggleButton);
         toggleButton.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        logIn.setOnMenuItemClickListener(listener);
     }
 
     @Override
@@ -80,39 +82,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 0) {
-            TextView txt = findViewById(R.id.txt);
-            try {
-                final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
-                if (yandexAuthToken != null) {
-                    // Success auth
-//                    sdk.extractToken(resultCode, data);
-                    Constants.YANDEX_OAUTH_TOKEN = yandexAuthToken.getValue();
-                    txt.append("Token success: " + yandexAuthToken.getValue());
-                    makeRequest();
-
-                }
-            } catch (YandexAuthException e) {
-                // Process error
-//                e.printStackTrace();
-//                e.toString()
-                txt.append("Error");
-            }
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void makeRequest() {
+    private void getDiskInfo() {
         Callback<Disk> callback = new Callback<Disk>() {
 
             @Override
             public void onResponse(Call<Disk> call, Response<Disk> response) {
                 Log.d("MyTag", String.valueOf(response.body()));
-                TextView txt = findViewById(R.id.txt);
-                txt.append(String.valueOf(response.body()));
+                View navHeader = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+                TextView displayName = navHeader.findViewById(R.id.display_name);
+//                TextView userLogin = navHeader.findViewById(R.id.login);
+                displayName.append(response.body().getUser().getDisplayName());
+                //userLogin.append(response.body().getUser().getLogin());
+
 
             }
 
@@ -122,7 +103,36 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         yandexApi.getDiskInfo().enqueue(callback);
+    }
 
+    private void getResourcesList() {
+        Callback<Test> callback = new Callback<Test>() {
+
+            @Override
+            public void onResponse(Call<Test> call, Response<Test> response) {
+//                Log.d("MyTag", String.valueOf(response.body()));
+                final RecyclerView fileListView = findViewById(R.id.fileList);
+                fileListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                final FileListAdapter adapter = new FileListAdapter(getApplicationContext());
+                fileListView.setAdapter(adapter);
+                fileListView.setHasFixedSize(true);
+
+                for (int i = 0; i < response.body().getEmbedded().getItems().size(); i++) {
+                    fileListView.scrollToPosition(0);
+                    Log.d("MyFILENAME", response.body().getEmbedded().getItems().get(i).getName());
+                    adapter.add(response.body().getEmbedded().getItems().get(i).getName());
+                }
+                /////////////////
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Test> call, Throwable t) {
+                t.printStackTrace();
+            }
+        };
+        yandexApi.getResources().enqueue(callback);
     }
 
 }

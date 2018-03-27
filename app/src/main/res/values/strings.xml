@@ -2,5 +2,16 @@
     <string name="app_name">DiskN</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+
+    <string name="files">Files</string>
+    <string name="trashBin">Trash</string>
+    <string name="settings">Settings</string>
+    <string name="accounts">Accounts</string>
+    <string name="about">About</string>
+    <string name="account_name">Account: </string>
+
+
 
 </resources>
