@@ -1,10 +1,9 @@
-package ru.mail.park.diskn.APIs;
+package ru.mail.park.diskn.api;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.mail.park.diskn.Constants;
-import ru.mail.park.diskn.Constants.*;
 
 /**
  * Created by nick on 23.03.18.

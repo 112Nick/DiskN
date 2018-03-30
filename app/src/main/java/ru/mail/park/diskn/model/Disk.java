@@ -1,4 +1,4 @@
-package ru.mail.park.diskn.Models;
+package ru.mail.park.diskn.model;
 
 
 import com.google.gson.annotations.SerializedName;

@@ -7,21 +7,7 @@
     tools:context="ru.mail.park.diskn.MainActivity"
     android:id="@+id/drawerLayout">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/txt"/>
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/txt"
-            android:id="@+id/fileList"
-            tools:listitem="@layout/item"/>
-    </RelativeLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -32,6 +18,12 @@
         app:headerLayout="@layout/navigation_header">
 
     </android.support.design.widget.NavigationView>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 
 </android.support.v4.widget.DrawerLayout>

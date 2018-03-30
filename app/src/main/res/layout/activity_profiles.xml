@@ -10,7 +10,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/YandexLoginBtn"
-        android:text="LOGIN"
+        android:text="YANDEX"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/GoogleLoginBtn"
+        android:layout_below="@+id/YandexLoginBtn"
+        android:text="GOOGLE"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>

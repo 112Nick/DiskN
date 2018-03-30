@@ -3,13 +3,10 @@ package ru.mail.park.diskn;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.yandex.authsdk.YandexAuthException;
 import com.yandex.authsdk.YandexAuthOptions;
@@ -19,12 +16,8 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.HashSet;
 import java.util.Set;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import ru.mail.park.diskn.APIs.RetrofitFactory;
-import ru.mail.park.diskn.APIs.YandexApi;
-import ru.mail.park.diskn.Models.Disk;
+import ru.mail.park.diskn.api.RetrofitFactory;
+import ru.mail.park.diskn.api.YandexApi;
 
 public class ProfilesActivity extends AppCompatActivity {
     private YandexAuthSdk sdk;

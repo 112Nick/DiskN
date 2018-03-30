@@ -2,13 +2,19 @@ package ru.mail.park.diskn;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.mail.park.diskn.model.ResourceItem;
 
 /**
  * Created by nick on 25.03.18.
@@ -16,7 +22,9 @@ import java.util.List;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileListViewHolder> {
     private final LayoutInflater layoutInflater;
-    private final List<String> data;
+    private final List<ResourceItem> data;
+
+
     public FileListAdapter (Context context) {
         layoutInflater = LayoutInflater.from(context);
         this.data = new ArrayList<>();
@@ -29,7 +37,14 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
 
     @Override
     public void onBindViewHolder(FileListViewHolder holder, int position) {
-        holder.textView.setText(data.get(position));
+        Picasso.get()
+                .load(data.get(position).getPreview())
+                .resize(70, 70)
+                .centerCrop()
+                .into(holder.preview);
+//        Log.d("MyPreview", data.get(position).getPreview());
+        holder.fileName.setText(data.get(position).getName());
+        holder.modified.setText(data.get(position).getModified());
     }
 
     @Override
@@ -37,17 +52,21 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
         return data.size();
     }
 
-    public void add(String newData) {
+    public void add(ResourceItem newData) {
         data.add(0, newData);
         notifyItemInserted(0);
     }
 
 
     final static class FileListViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        private final TextView fileName;
+        private final TextView modified;
+        private final ImageView preview;
         public FileListViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.fileName);
+            fileName = itemView.findViewById(R.id.fileName);
+            modified = itemView.findViewById(R.id.date);
+            preview = itemView.findViewById(R.id.preview);
         }
     }
 }

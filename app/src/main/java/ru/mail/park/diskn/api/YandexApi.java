@@ -1,15 +1,9 @@
-package ru.mail.park.diskn.APIs;
-
-import java.util.ArrayList;
-import java.util.List;
+package ru.mail.park.diskn.api;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
-import ru.mail.park.diskn.Models.Disk;
-import ru.mail.park.diskn.Models.Embedded;
-import ru.mail.park.diskn.Models.ResourceItem;
-import ru.mail.park.diskn.Models.Test;
+import ru.mail.park.diskn.model.Disk;
+import ru.mail.park.diskn.model.Test;
 
 /**
  * Created by nick on 23.03.18.
@@ -24,4 +18,9 @@ public interface YandexApi {
 
     @GET("/v1/disk/resources?path=%2F")
     Call<Test> getResources();
+
+
+
+    @GET("/v1/disk/trash/resources?path=%2F")
+    Call<Test> getTrashResources();
 }
