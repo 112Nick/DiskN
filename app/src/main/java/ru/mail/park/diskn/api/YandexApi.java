@@ -3,7 +3,7 @@ package ru.mail.park.diskn.api;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import ru.mail.park.diskn.model.Disk;
-import ru.mail.park.diskn.model.Test;
+import ru.mail.park.diskn.model.FilesArr;
 
 /**
  * Created by nick on 23.03.18.
@@ -17,10 +17,10 @@ public interface YandexApi {
     Call<Disk> getDiskInfo();
 
     @GET("/v1/disk/resources?path=%2F")
-    Call<Test> getResources();
+    Call<FilesArr> getResources();
 
 
 
     @GET("/v1/disk/trash/resources?path=%2F")
-    Call<Test> getTrashResources();
+    Call<FilesArr> getTrashResources();
 }

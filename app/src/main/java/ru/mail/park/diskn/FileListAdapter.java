@@ -2,7 +2,6 @@ package ru.mail.park.diskn;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,6 @@ import java.util.List;
 
 import ru.mail.park.diskn.model.ResourceItem;
 
-/**
- * Created by nick on 25.03.18.
- */
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileListViewHolder> {
     private final LayoutInflater layoutInflater;

@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Created by nick on 26.03.18.
  */
 
-public class Test {
+public class FilesArr {
 
     @SerializedName("_embedded")
     Embedded embedded;
 
-    public Test(Embedded embedded) {
+    public FilesArr(Embedded embedded) {
         this.embedded = embedded;
     }
 

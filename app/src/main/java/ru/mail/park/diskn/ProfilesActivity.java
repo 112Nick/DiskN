@@ -2,10 +2,10 @@ package ru.mail.park.diskn;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.yandex.authsdk.YandexAuthException;
@@ -16,56 +16,57 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.HashSet;
 import java.util.Set;
 
-import ru.mail.park.diskn.api.RetrofitFactory;
-import ru.mail.park.diskn.api.YandexApi;
 
 public class ProfilesActivity extends AppCompatActivity {
     private YandexAuthSdk sdk;
     private Context context;
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+    private final static String KEY_IS_FIRST = "is_first";
+    private final static String KEY_OAUTH = "oauth";
+    private final static String STORAGE_NAME = "storage";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiles);
+        SharedPreferences prefs = getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        //TODO check if logged in
+        if (!prefs.getBoolean(KEY_IS_FIRST, true)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
         Button YandexLoginBtn = findViewById(R.id.YandexLoginBtn);
-        YandexLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Set<String> scopes = new HashSet<>();
-                sdk = new YandexAuthSdk(context, new YandexAuthOptions(context, true));
-                startActivityForResult(sdk.createLoginIntent(context, scopes), 0);
-            }
+        YandexLoginBtn.setOnClickListener(v -> {
+            final Set<String> scopes = new HashSet<>();
+            sdk = new YandexAuthSdk(context, new YandexAuthOptions(context, true));
+            startActivityForResult(sdk.createLoginIntent(context, scopes), 0);
+            editor.putBoolean(KEY_IS_FIRST, false);
+            editor.apply();
         });
 
     }
-    //
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        SharedPreferences.Editor editor = getSharedPreferences(STORAGE_NAME, MODE_PRIVATE).edit();
         if (requestCode == 0) {
             try {
                 final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
                 if (yandexAuthToken != null) {
                     // Success auth
-                    Constants.YANDEX_OAUTH_TOKEN = yandexAuthToken.getValue();
-
+                    editor.putString(KEY_OAUTH, yandexAuthToken.getValue());
+                    editor.apply();
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
-//                   getResourcesList();
-                    //getDiskInfo();
-
                 }
             } catch (YandexAuthException e) {
                 // Process error
-//                e.printStackTrace();
-//                e.toString()
             }
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
-
 }
