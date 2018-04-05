@@ -16,6 +16,8 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 
 public class ProfilesActivity extends AppCompatActivity {
     private YandexAuthSdk sdk;
@@ -35,6 +37,7 @@ public class ProfilesActivity extends AppCompatActivity {
         //TODO check if logged in
         if (!prefs.getBoolean(KEY_IS_FIRST, true)) {
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);//TODO fix
             startActivity(intent);
         }
 

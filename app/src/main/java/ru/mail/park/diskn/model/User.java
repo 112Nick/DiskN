@@ -3,10 +3,10 @@ package ru.mail.park.diskn.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- *  used   country (string, optional): <Страна>,
- *  used   login (string, optional): <Логин>,
- *  used   display_name (string, optional): <Отображаемое имя>,
- *  used   uid (string, optional): <Идентификатор пользователя>
+ * used   country (string, optional): <Страна>,
+ * used   login (string, optional): <Логин>,
+ * used   display_name (string, optional): <Отображаемое имя>,
+ * used   uid (string, optional): <Идентификатор пользователя>
  */
 
 public class User {

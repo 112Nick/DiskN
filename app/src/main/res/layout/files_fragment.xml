@@ -5,11 +5,19 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:id="@+id/fileList"
-        tools:listitem="@layout/item"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fileList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            tools:listitem="@layout/item"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </RelativeLayout>

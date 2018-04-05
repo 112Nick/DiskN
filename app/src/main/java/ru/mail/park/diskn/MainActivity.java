@@ -18,13 +18,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
+import ru.mail.park.diskn.fragment.FilesFragment;
+import ru.mail.park.diskn.fragment.TrashFragment;
 import ru.mail.park.diskn.model.Disk;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggleButton;
-    private Context context;
     private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
 
 
@@ -35,19 +36,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawerLayout);
         toggleButton = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        context = this;
+        Context context = this;
         getDiskInfo();
 
         NavigationView navView = findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, FilesFragment.newInstance())
+                .add(R.id.container, FilesFragment.newInstance("/"))
+//                .addToBackStack("history")
                 .commit();
+
         drawerLayout.addDrawerListener(toggleButton);
 
         toggleButton.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            //TODO
+        }
 
     }
 
@@ -70,7 +77,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 View navHeader = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
                 TextView displayName = navHeader.findViewById(R.id.display_name);
 //                TextView userLogin = navHeader.findViewById(R.id.login);
-                displayName.append(response.body().getUser().getDisplayName());
+                try {
+                    displayName.append(response.body().getUser().getDisplayName());
+
+                } catch (NullPointerException e) {
+                    //TODO
+                }
                 //userLogin.append(response.body().getUser().getLogin());
 
 
@@ -78,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<Disk> call, Throwable t) {
+                //TODO
                 t.printStackTrace();
             }
         };
@@ -89,14 +102,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.files: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, FilesFragment.newInstance())
+                        .replace(R.id.container, FilesFragment.newInstance("/"))
+                        .addToBackStack("history")
                         .commit();
+
                 drawerLayout.closeDrawers();
                 break;
             }
             case R.id.trash: {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, TrashFragment.newInstance())
+                        .addToBackStack("history")
                         .commit();
                 drawerLayout.closeDrawers();
                 break;

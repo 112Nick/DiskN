@@ -7,15 +7,15 @@ import java.math.BigDecimal;
 
 
 /**
- *        max_file_size (integer, optional): <Максимальный поддерживаемый размер файла.>,
- *        unlimited_autoupload_enabled (boolean, optional): <Признак включенной безлимитной автозагрузки с мобильных устройств.>,
- *  used  total_space (integer, optional): <Общий объем диска (байт)>,
- *  used  trash_size (integer, optional): <Общий размер файлов в Корзине (байт). Входит в used_space.>,
- *        is_paid (boolean, optional): <Признак наличия купленного места.>,
- *  used  used_space (integer, optional): <Используемый объем диска (байт)>,
- *        system_folders (SystemFolders, optional): <Адреса системных папок в Диске пользователя.>,
- *  used  user (User, optional): <Владелец Диска>,
- *        revision (integer, optional): <Текущая ревизия Диска>
+ * ----  max_file_size (integer, optional): <Максимальный поддерживаемый размер файла.>,
+ * ----  unlimited_autoupload_enabled (boolean, optional): <Признак включенной безлимитной автозагрузки с мобильных устройств.>,
+ * used  total_space (integer, optional): <Общий объем диска (байт)>,
+ * used  trash_size (integer, optional): <Общий размер файлов в Корзине (байт). Входит в used_space.>,
+ * ----  is_paid (boolean, optional): <Признак наличия купленного места.>,
+ * used  used_space (integer, optional): <Используемый объем диска (байт)>,
+ * ----  system_folders (SystemFolders, optional): <Адреса системных папок в Диске пользователя.>,
+ * used  user (User, optional): <Владелец Диска>,
+ * ----  revision (integer, optional): <Текущая ревизия Диска>
  */
 
 public class Disk {

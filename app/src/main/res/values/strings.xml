@@ -11,6 +11,9 @@
     <string name="accounts">Accounts</string>
     <string name="about">About</string>
     <string name="account_name">Account: </string>
+    <string name="refresh">Refresh</string>
+
+    <string name="emptyList">Ooops! This folder seems to be empty! </string>
 
 
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Embedded {
     @SerializedName("items")
-    ArrayList<ResourceItem> items;
+    private ArrayList<ResourceItem> items;
 
     public ArrayList<ResourceItem> getItems() {
         return items;
