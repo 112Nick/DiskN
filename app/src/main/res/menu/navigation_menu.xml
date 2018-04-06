@@ -4,24 +4,19 @@
     <item
         android:id="@+id/files"
         android:icon="@mipmap/ic_insert_drive_file_black_24dp"
-        android:title="@string/files">
-    </item>
+        android:title="@string/files" />
 
     <item
         android:id="@+id/trash"
         android:icon="@mipmap/ic_delete_black_24dp"
-        android:title="@string/trashBin">
-    </item>
+        android:title="@string/trashBin" />
 
     <item
         android:id="@+id/settings"
         android:icon="@mipmap/ic_settings_black_24dp"
-        android:title="@string/settings">
-    </item>
+        android:title="@string/settings" />
     <item
-        android:id="@+id/accounts"
         android:icon="@mipmap/ic_account_circle_black_24dp"
-        android:title="@string/accounts">
-    </item>
+        android:title="@string/accounts" />
 
 </menu>

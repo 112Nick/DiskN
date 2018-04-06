@@ -21,7 +21,7 @@ public class RetrofitFactory {
 
     public static OkHttpClient httpClient;
 
-    private final SharedPreferences prefs  = App.getInstance().getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
+    private final SharedPreferences prefs = App.getInstance().getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
 
     public <T> T create(Class<T> apiClass, String baseUrl) {
         httpClient = createOkHttp();
@@ -34,12 +34,11 @@ public class RetrofitFactory {
     }
 
 
-
     private OkHttpClient createOkHttp() {
         return new OkHttpClient.Builder()
                 .addInterceptor(chain -> chain.proceed(
                         chain.request().newBuilder()
-                                .addHeader("Authorization", "OAuth " + prefs.getString(KEY_OAUTH , "Can't read"))
+                                .addHeader("Authorization", "OAuth " + prefs.getString(KEY_OAUTH, "Can't read"))
                                 .build()))
                 .build();
     }

@@ -2,7 +2,6 @@
     <string name="app_name">DiskN</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="title_activity_profile">ProfileActivity</string>
 
 
     <string name="files">Files</string>
@@ -13,8 +12,9 @@
     <string name="account_name">Account: </string>
     <string name="refresh">Refresh</string>
 
-    <string name="emptyList">Ooops! This folder seems to be empty! </string>
-
+    <string name="emptyList">This folder seems to be empty! </string>
+    <string name="yandex">yandex</string>
+    <string name="google">google</string>
 
 
 </resources>

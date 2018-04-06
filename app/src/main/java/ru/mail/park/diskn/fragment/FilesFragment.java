@@ -21,25 +21,38 @@ import ru.mail.park.diskn.R;
 import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.model.FilesArr;
-import ru.mail.park.diskn.model.ResourceItem;
 
 public class FilesFragment extends Fragment {
-
+    private static final String PATH_EXTRA = "PATH_EXTRA";
     private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
-    RecyclerView fileListView;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView fileListView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private String path;
 
     public static FilesFragment newInstance(String path) {
         FilesFragment firstFragment = new FilesFragment();
-        firstFragment.path = path;
+        Bundle bundle = new Bundle();
+        bundle.putString(PATH_EXTRA, path);
+        firstFragment.setArguments(bundle);
         return firstFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            path = arguments.getString(PATH_EXTRA);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            path = arguments.getString(PATH_EXTRA);
+        }
         getResourcesList(context);
     }
 
@@ -58,12 +71,6 @@ public class FilesFragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
 
     private void getResourcesList(Context context) {
         Callback<FilesArr> callback = new Callback<FilesArr>() {
@@ -75,26 +82,15 @@ public class FilesFragment extends Fragment {
                 fileListView.setAdapter(adapter);
                 fileListView.setHasFixedSize(true);
 
-                try {
-                    for (int i = 0; i < response.body().getEmbedded().getItems().size(); i++) {
+                FilesArr body = response.body();
+                if (body != null) {
+                    for (int i = 0; i < body.getEmbedded().getItems().size(); i++) {
                         fileListView.scrollToPosition(0);
-                        adapter.add(response.body().getEmbedded().getItems().get(i));
+                        adapter.add(body.getEmbedded().getItems().get(i));
                     }
-                } catch (NullPointerException e) {
-                    //TODO emptyFragment
-
                 }
-                swipeRefreshLayout.setRefreshing(false);
 
-//                if (response.body().getEmbedded().getItems().isEmpty()) {
-//                    // emptyFragment
-//                }
-//                else {
-//                    for (int i = 0; i < response.body().getEmbedded().getItems().size(); i++) {
-//                        fileListView.scrollToPosition(0);
-//                        adapter.add(response.body().getEmbedded().getItems().get(i));
-//                    }
-//                }
+                swipeRefreshLayout.setRefreshing(false);
 
             }
 

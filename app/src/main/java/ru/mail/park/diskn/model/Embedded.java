@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 public class Embedded {
     @SerializedName("items")
-    private ArrayList<ResourceItem> items;
-
-    public ArrayList<ResourceItem> getItems() {
-        return items;
-    }
+    private final ArrayList<ResourceItem> items;
 
     public Embedded(ArrayList<ResourceItem> items) {
         this.items = items;
+    }
+
+    public ArrayList<ResourceItem> getItems() {
+        return items;
     }
 }

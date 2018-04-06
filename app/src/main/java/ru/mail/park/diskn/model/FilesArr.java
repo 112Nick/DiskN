@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class FilesArr {
 
     @SerializedName("_embedded")
-    private Embedded embedded;
+    private final Embedded embedded;
 
     public FilesArr(Embedded embedded) {
         this.embedded = embedded;

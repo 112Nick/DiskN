@@ -3,9 +3,9 @@ package ru.mail.park.diskn;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Button;
 
 import com.yandex.authsdk.YandexAuthException;
@@ -20,12 +20,11 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 
 public class ProfilesActivity extends AppCompatActivity {
-    private YandexAuthSdk sdk;
-    private Context context;
     private final static String KEY_IS_FIRST = "is_first";
     private final static String KEY_OAUTH = "oauth";
     private final static String STORAGE_NAME = "storage";
-
+    private YandexAuthSdk sdk;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

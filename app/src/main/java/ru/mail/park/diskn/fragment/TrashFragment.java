@@ -25,8 +25,8 @@ import ru.mail.park.diskn.model.FilesArr;
 public class TrashFragment extends Fragment {
 
     private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
-    RecyclerView fileListView;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView fileListView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public static TrashFragment newInstance() {
@@ -55,12 +55,6 @@ public class TrashFragment extends Fragment {
     }
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
     private void getTrashResources() {
         Callback<FilesArr> callback = new Callback<FilesArr>() {
 
@@ -71,15 +65,15 @@ public class TrashFragment extends Fragment {
                 fileListView.setAdapter(adapter);
                 fileListView.setHasFixedSize(true);
 
-                try {
-                    for (int i = 0; i < response.body().getEmbedded().getItems().size(); i++) {
+                FilesArr body = response.body();
+                if (body != null) {
+                    for (int i = 0; i < body.getEmbedded().getItems().size(); i++) {
                         fileListView.scrollToPosition(0);
-                        adapter.add(response.body().getEmbedded().getItems().get(i));
+                        adapter.add(body.getEmbedded().getItems().get(i));
                     }
-
-                } catch (NullPointerException e) {
-                    //TODO emptyFragment
                 }
+
+
                 swipeRefreshLayout.setRefreshing(false);
 
 //                if (response.body().getEmbedded().getItems().isEmpty()) {

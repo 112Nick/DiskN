@@ -100,14 +100,11 @@ public class ResourceItem {
         return media_type;
     }
 
-    public String getType() {
+    private String getType() {
         return type;
     }
 
     public boolean isDirectory() {
-        if (this.getType().equals("dir")) {
-            return true;
-        }
-        return false;
+        return type.equals("dir");
     }
 }

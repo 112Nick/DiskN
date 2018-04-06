@@ -1,17 +1,16 @@
 package ru.mail.park.diskn;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,10 +23,9 @@ import ru.mail.park.diskn.model.Disk;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggleButton;
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
-
 
     // TODO REQUEST_LOGIN_SDK = 0
     @Override
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawerLayout);
         toggleButton = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        Context context = this;
+
         getDiskInfo();
 
         NavigationView navView = findViewById(R.id.nav_view);
@@ -44,16 +42,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, FilesFragment.newInstance("/"))
-//                .addToBackStack("history")
+                .addToBackStack(null)
                 .commit();
 
         drawerLayout.addDrawerListener(toggleButton);
 
         toggleButton.syncState();
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } catch (NullPointerException e) {
-            //TODO
+
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
     }
@@ -67,25 +65,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     private void getDiskInfo() {
         Callback<Disk> callback = new Callback<Disk>() {
 
             @Override
             public void onResponse(Call<Disk> call, Response<Disk> response) {
-                Log.d("MyTag", String.valueOf(response.body()));
+                Disk body = response.body();
+                Log.d("MyTag", String.valueOf(body));
                 View navHeader = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
                 TextView displayName = navHeader.findViewById(R.id.display_name);
 //                TextView userLogin = navHeader.findViewById(R.id.login);
-                try {
-                    displayName.append(response.body().getUser().getDisplayName());
-
-                } catch (NullPointerException e) {
-                    //TODO
+                if (body != null) {
+                    displayName.append(body.getUser().getDisplayName());
                 }
-                //userLogin.append(response.body().getUser().getLogin());
-
-
             }
 
             @Override
@@ -103,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.files: {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, FilesFragment.newInstance("/"))
-                        .addToBackStack("history")
+                        .addToBackStack(null)
                         .commit();
 
                 drawerLayout.closeDrawers();
@@ -112,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.trash: {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, TrashFragment.newInstance())
-                        .addToBackStack("history")
+                        .addToBackStack(null)
                         .commit();
                 drawerLayout.closeDrawers();
                 break;
