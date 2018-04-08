@@ -3,6 +3,7 @@ package ru.mail.park.diskn.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * ----    antivirus_status (undefined, optional): <Статус проверки антивирусом>,
@@ -41,7 +42,7 @@ public class ResourceItem {
     @SerializedName("file")
     private final String fileURL;
     @SerializedName("size")
-    private final BigDecimal size;
+    private final Integer size;
     @SerializedName("media_type")
     private final String media_type;
     @SerializedName("type")
@@ -51,12 +52,13 @@ public class ResourceItem {
     @SerializedName("path")
     private final String path;
 
-    public ResourceItem(String resourceId, String name, String created, String path, String modified, String fileURL, BigDecimal size, String media_type, String type, String preview) {
+    public ResourceItem(String resourceId, String name, String created, String path, String modified, String fileURL, Integer size, String media_type, String type, String preview) {
         this.resourceId = resourceId;
         this.name = name;
         this.created = created;
         this.modified = modified;
         this.fileURL = fileURL;
+
         this.size = size;
         this.media_type = media_type;
         this.type = type;
@@ -81,19 +83,32 @@ public class ResourceItem {
     }
 
     public String getCreated() {
-        return created;
+        return created.substring(0,10) + " / " + created.substring(11,16);
     }
 
     public String getModified() {
-        return modified;
+        return modified.substring(0,10) + " / " + modified.substring(11,16);
     }
 
     public String getFileURL() {
         return fileURL;
     }
 
-    public BigDecimal getSize() {
-        return size;
+    public String getSize() {
+        Double sizeF = this.size.doubleValue();
+        String sizeClass = "Kb";
+        sizeF = sizeF/1024; //KiloBytes
+        if (sizeF >= 1024) {
+            sizeF = sizeF/1024; // MegaBytes
+            sizeClass = "Mb";
+
+        }
+        if (sizeF >= 1024) {
+            sizeF = sizeF/1024; //GigaBytes
+            sizeClass = "Gb";
+        }
+
+        return String.format(Locale.getDefault(), "%.2f", sizeF)+" "+sizeClass;
     }
 
     public String getMedia_type() {

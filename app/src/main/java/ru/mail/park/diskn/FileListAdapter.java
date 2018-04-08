@@ -1,9 +1,12 @@
 package ru.mail.park.diskn;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +14,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.fragment.FilesFragment;
 import ru.mail.park.diskn.model.ResourceItem;
@@ -28,18 +30,13 @@ import ru.mail.park.diskn.model.ResourceItem;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileListViewHolder> {
     //TODO warning
-    private static Picasso picasso;
     private final LayoutInflater layoutInflater;
     private final List<ResourceItem> data;
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
 
 
     public FileListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
         this.data = new ArrayList<>();
-        picasso = new Picasso.Builder(context)
-                .downloader(new OkHttp3Downloader(RetrofitFactory.httpClient))
-                .build();
 
     }
 
@@ -64,6 +61,10 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
         data.add(0, newData);
         notifyItemInserted(0);
     }
+    public void addToPosition(ResourceItem newData) {
+        data.add(data.indexOf(newData), newData);
+        notifyItemInserted(data.indexOf(newData));
+    }
 
     private void remove(ResourceItem r) {
         notifyItemRemoved(data.indexOf(r));
@@ -78,7 +79,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
         private final ImageView preview;
         private final Context context;
         private final FileListAdapter adapter;
-        private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+        private final YandexApi yandexApi = Injector.getInstance().yandexApi;
+        private final Picasso picasso = Injector.getInstance().picasso;
 
 
         FileListViewHolder(View itemView, FileListAdapter parent) {
@@ -108,7 +110,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
             } else {
                 if (resourceItem.getPreview() != null) {
                     picasso.load(resourceItem.getPreview())
-                            .resize(70, 70)
+                            .resize(90, 90)
                             .centerCrop()
                             .into(preview);
                 } else {
@@ -125,6 +127,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
                     View dialogView = LayoutInflater.from(context).inflate(R.layout.item_detailed, null);
                     dialogBuilder.setView(dialogView);
                     AlertDialog dialog = dialogBuilder.create();
+                    Button downloadBtn = dialogView.findViewById(R.id.download);
                     Button deleteBtn = dialogView.findViewById(R.id.delete);
                     Button copyBtn = dialogView.findViewById(R.id.copy);
                     ImageView previewDetailed = dialogView.findViewById(R.id.preview_detailed);
@@ -132,9 +135,10 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
 
                     if (resourceItem.getPreview() != null) {
                         picasso.load(resourceItem.getPreview())
-                                .resize(70, 70)
+                                .resize(130,130)
                                 .centerCrop()
                                 .into(previewDetailed);
+                        Log.d("FileURL", resourceItem.getFileURL());
                     } else {
                         previewDetailed.setImageResource(R.drawable.ic_file_unknown);
                     }
@@ -142,17 +146,31 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
                     TextView filenameDetailed = dialogView.findViewById(R.id.filename_detailed);
 
                     TextView mediaType = dialogView.findViewById(R.id.media_type);
-                    mediaType.setText(resourceItem.getMedia_type());
+                    mediaType.append(resourceItem.getMedia_type());
 
 
                     filenameDetailed.setText(resourceItem.getName());
 
-//                    TextView fileSize = dialogView.findViewById(R.id.size);
+                    TextView fileSize = dialogView.findViewById(R.id.size);
                     //TODO warning
-//                    fileSize.setText(String.format()resourceItem.getSize().toString());
+                    fileSize.append(resourceItem.getSize());
 
                     TextView created = dialogView.findViewById(R.id.created);
-                    created.setText(resourceItem.getCreated());
+                    created.append(resourceItem.getCreated());
+
+                    TextView modified = dialogView.findViewById(R.id.modified);
+                    modified.append(resourceItem.getModified());
+
+                    downloadBtn.setOnClickListener(v12 -> {
+                        dialog.hide();
+                        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                        Uri uri = Uri.parse(resourceItem.getFileURL());
+                        DownloadManager.Request request = new DownloadManager.Request(uri);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        if (downloadManager != null) {
+                            downloadManager.enqueue(request);
+                        }
+                    });
 
 
                     deleteBtn.setOnClickListener(v1 -> {
@@ -177,14 +195,13 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
 
                     });
 
-                    copyBtn.setOnClickListener(v1 ->{
+                    copyBtn.setOnClickListener(v1 -> {
 
 //                        deleteResource(context,resourceItem.getPath());
                         Callback<Void> callback = new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
-//                                yandexApi.getResources()
-                                adapter.add(resourceItem);
+                                adapter.addToPosition(resourceItem);
                                 dialog.hide();
                             }
 
@@ -194,8 +211,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
                             }
 
                         };
-
-                        yandexApi.copyResource(resourceItem.getPath(), "_Copy_"+resourceItem.getName()).enqueue(callback);
+                        //TODO path
+                        yandexApi.copyResource(resourceItem.getPath(), "_Copy_" + resourceItem.getName()).enqueue(callback);
 
                     });
 

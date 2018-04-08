@@ -16,5 +16,13 @@
     <string name="yandex">yandex</string>
     <string name="google">google</string>
 
+    <string name="download">download</string>
+    <string name="delete">delete</string>
+    <string name="make_copy">make copy</string>
+    <string name="media_type">Media type:</string>
+    <string name="size">Size:</string>
+    <string name="created_on">Created on:</string>
+    <string name="modified_on">Modified on:</string>
+
 
 </resources>

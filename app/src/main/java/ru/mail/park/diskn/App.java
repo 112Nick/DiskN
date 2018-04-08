@@ -19,6 +19,7 @@ public class App extends Application {
         super.onCreate();
         //YandexAuthSdk sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
         //startActivityForResult(sdk.createLoginIntent(this, scopes), 0);
+        Injector.init(this);
         app = this;
     }
 }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.fragment.FilesFragment;
 import ru.mail.park.diskn.fragment.TrashFragment;
@@ -23,7 +22,7 @@ import ru.mail.park.diskn.model.Disk;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+    private final YandexApi yandexApi =Injector.getInstance().yandexApi;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggleButton;
 

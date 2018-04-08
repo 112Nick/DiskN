@@ -15,16 +15,15 @@ import android.view.ViewGroup;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.mail.park.diskn.Constants;
 import ru.mail.park.diskn.FileListAdapter;
+import ru.mail.park.diskn.Injector;
 import ru.mail.park.diskn.R;
-import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.model.FilesArr;
 
 public class TrashFragment extends Fragment {
 
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+    private final YandexApi yandexApi = Injector.getInstance().yandexApi;
     private RecyclerView fileListView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -37,7 +36,6 @@ public class TrashFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        getTrashResources();
     }
 
     @Nullable
@@ -50,7 +48,7 @@ public class TrashFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         fileListView = view.findViewById(R.id.fileList);
         swipeRefreshLayout = view.findViewById(R.id.swipe);
-
+        getTrashResources();
         swipeRefreshLayout.setOnRefreshListener(this::getTrashResources);
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,15 @@ import android.view.ViewGroup;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.mail.park.diskn.Constants;
 import ru.mail.park.diskn.FileListAdapter;
+import ru.mail.park.diskn.Injector;
 import ru.mail.park.diskn.R;
-import ru.mail.park.diskn.api.RetrofitFactory;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.model.FilesArr;
 
 public class FilesFragment extends Fragment {
     private static final String PATH_EXTRA = "PATH_EXTRA";
-    private final YandexApi yandexApi = new RetrofitFactory().create(YandexApi.class, Constants.YANDEX_BASE_URL);
+    private final YandexApi yandexApi = Injector.getInstance().yandexApi;
     private RecyclerView fileListView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String path;
@@ -44,6 +44,7 @@ public class FilesFragment extends Fragment {
         if (arguments != null) {
             path = arguments.getString(PATH_EXTRA);
         }
+
     }
 
     @Override
@@ -53,12 +54,13 @@ public class FilesFragment extends Fragment {
         if (arguments != null) {
             path = arguments.getString(PATH_EXTRA);
         }
-        getResourcesList(context);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.files_fragment, container, false);
     }
 
@@ -66,19 +68,19 @@ public class FilesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         fileListView = view.findViewById(R.id.fileList);
         swipeRefreshLayout = view.findViewById(R.id.swipe);
-
-        swipeRefreshLayout.setOnRefreshListener(() -> getResourcesList(getContext()));
+        getResourcesList();
+        swipeRefreshLayout.setOnRefreshListener(this::getResourcesList);
 
     }
 
 
-    private void getResourcesList(Context context) {
+    private void getResourcesList() {
         Callback<FilesArr> callback = new Callback<FilesArr>() {
 
             @Override
             public void onResponse(Call<FilesArr> call, Response<FilesArr> response) {
-                fileListView.setLayoutManager(new LinearLayoutManager(context));
-                final FileListAdapter adapter = new FileListAdapter(context);
+                fileListView.setLayoutManager(new LinearLayoutManager(getContext()));
+                final FileListAdapter adapter = new FileListAdapter(getContext());
                 fileListView.setAdapter(adapter);
                 fileListView.setHasFixedSize(true);
 
