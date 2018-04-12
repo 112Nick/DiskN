@@ -16,8 +16,6 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-
 
 public class ProfilesActivity extends AppCompatActivity {
     private final static String KEY_IS_FIRST = "is_first";
@@ -35,9 +33,7 @@ public class ProfilesActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         //TODO check if logged in
         if (!prefs.getBoolean(KEY_IS_FIRST, true)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);//TODO fix
-            startActivity(intent);
+            startMainActivity();
         }
 
         Button YandexLoginBtn = findViewById(R.id.YandexLoginBtn);
@@ -51,6 +47,12 @@ public class ProfilesActivity extends AppCompatActivity {
 
     }
 
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);//TODO fix
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         SharedPreferences.Editor editor = getSharedPreferences(STORAGE_NAME, MODE_PRIVATE).edit();
@@ -61,8 +63,7 @@ public class ProfilesActivity extends AppCompatActivity {
                     // Success auth
                     editor.putString(KEY_OAUTH, yandexAuthToken.getValue());
                     editor.apply();
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
+                    startMainActivity();
                 }
             } catch (YandexAuthException e) {
                 // Process error

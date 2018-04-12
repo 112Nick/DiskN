@@ -6,10 +6,21 @@
     android:layout_height="match_parent">
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:src="@mipmap/ic_delete_black_24dp" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
 
         <android.support.v7.widget.RecyclerView
@@ -19,6 +30,9 @@
             android:layout_alignParentStart="true"
             tools:listitem="@layout/item" />
 
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
 </RelativeLayout>

@@ -22,32 +22,30 @@ public class Injector {
 
     @SuppressLint("StaticFieldLeak") // application context - singleton
     private static Injector instance = null;
-    private final Context context;
     public final Picasso picasso ;
     public final YandexApi yandexApi;
-    public final OkHttpClient httpClient;
 
     private final SharedPreferences prefs;
 
 
     private Injector(Context context) {
-        this.context = context.getApplicationContext();
+        Context context1 = context.getApplicationContext();
 
         this.prefs = context.getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
 
-        this.httpClient = new OkHttpClient.Builder()
+        OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(chain -> chain.proceed(
                         chain.request().newBuilder()
                                 .addHeader("Authorization", "OAuth " + prefs.getString(KEY_OAUTH, "Can't read"))
                                 .build()))
                 .build();
-        this.picasso = new Picasso.Builder(this.context)
-                .downloader(new OkHttp3Downloader(this.httpClient))
+        this.picasso = new Picasso.Builder(context1)
+                .downloader(new OkHttp3Downloader(httpClient))
                         .build();
 
         this.yandexApi = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(this.httpClient)
+                .client(httpClient)
                 .baseUrl(YandexApi.YANDEX_BASE_URL)
                 .build()
                 .create(YandexApi.class);

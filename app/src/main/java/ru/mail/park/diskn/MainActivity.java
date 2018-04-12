@@ -16,8 +16,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.mail.park.diskn.api.YandexApi;
+import ru.mail.park.diskn.fragment.AccountFragment;
 import ru.mail.park.diskn.fragment.FilesFragment;
-import ru.mail.park.diskn.fragment.TrashFragment;
 import ru.mail.park.diskn.model.Disk;
 
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, FilesFragment.newInstance("/"))
+                .replace(R.id.container, FilesFragment.newInstance("/", "files"))
                 .addToBackStack(null)
                 .commit();
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.files: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, FilesFragment.newInstance("/"))
+                        .replace(R.id.container, FilesFragment.newInstance("/", "files"))
                         .addToBackStack(null)
                         .commit();
 
@@ -102,12 +102,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             case R.id.trash: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, TrashFragment.newInstance())
+                        .replace(R.id.container, FilesFragment.newInstance("/", "trash"))
                         .addToBackStack(null)
                         .commit();
                 drawerLayout.closeDrawers();
                 break;
             }
+            case R.id.account: {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, AccountFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+                drawerLayout.closeDrawers();
+                break;
+            }
+
 
         }
         return true;

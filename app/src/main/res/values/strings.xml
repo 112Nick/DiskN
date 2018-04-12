@@ -3,11 +3,15 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
 
+    <string name="files_title">Files</string>
+    <string name="trash_title">Trash</string>
+    <string name="account_title">Account</string>
+
 
     <string name="files">Files</string>
     <string name="trashBin">Trash</string>
     <string name="settings">Settings</string>
-    <string name="accounts">Accounts</string>
+    <string name="account">Account</string>
     <string name="about">About</string>
     <string name="account_name">Account: </string>
     <string name="refresh">Refresh</string>
@@ -23,6 +27,15 @@
     <string name="size">Size:</string>
     <string name="created_on">Created on:</string>
     <string name="modified_on">Modified on:</string>
+    <string name="trash_size">Trash size:</string>
+    <string name="used_space">Used space:</string>
+    <string name="total_space">Total space:</string>
+    <string name="county">County:</string>
+    <string name="log_out">log out</string>
+    <string name="confirm">Do you want to clear all the trash?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="restore">restore</string>
 
 
 </resources>

@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import ru.mail.park.diskn.model.Disk;
 import ru.mail.park.diskn.model.FilesArr;
@@ -19,8 +20,8 @@ public interface YandexApi {
     @GET("/v1/disk")
     Call<Disk> getDiskInfo();
 
+    //Files
     @GET("/v1/disk/resources")
-//    Call<FilesArr> getResources();
     Call<FilesArr> getResources(@Query("path") String path);
 
     @DELETE("/v1/disk/resources")
@@ -30,6 +31,13 @@ public interface YandexApi {
     Call<Void> copyResource(@Query("from") String from, @Query("path") String path);
 
 
-    @GET("/v1/disk/trash/resources?path=%2F")
-    Call<FilesArr> getTrashResources();
+    //Trash
+    @PUT("/v1/disk/trash/resources/restore")
+    Call<Void> restoreResource(@Query("path") String path);
+
+    @DELETE("/v1/disk/trash/resources")
+    Call<Void> deleteAllFromTrash();
+
+    @GET("/v1/disk/trash/resources")
+    Call<FilesArr> getTrashResources(@Query("path") String path);
 }

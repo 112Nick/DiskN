@@ -2,7 +2,6 @@ package ru.mail.park.diskn.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.math.BigDecimal;
 import java.util.Locale;
 
 /**
@@ -51,8 +50,11 @@ public class ResourceItem {
     private final String preview;
     @SerializedName("path")
     private final String path;
+    @SerializedName("origin_path")
+    private final String originPath;
 
-    public ResourceItem(String resourceId, String name, String created, String path, String modified, String fileURL, Integer size, String media_type, String type, String preview) {
+    public ResourceItem(String resourceId, String name, String created, String path, String modified,
+                        String fileURL, Integer size, String media_type, String type, String preview, String originPath) {
         this.resourceId = resourceId;
         this.name = name;
         this.created = created;
@@ -64,6 +66,8 @@ public class ResourceItem {
         this.type = type;
         this.preview = preview;
         this.path = path;
+        this.originPath = originPath;
+//        this.originPath = path.substring(5, path.length());
     }
 
     public String getPreview() {
@@ -71,7 +75,11 @@ public class ResourceItem {
     }
 
     public String getPath() {
-        return path.substring(5, path.length());
+        if (path.charAt(0) == 'd') {
+            return path.substring(5, path.length());
+        }
+        return path.substring(6, path.length());
+
     }
 
     public String getResourceId() {
@@ -82,12 +90,21 @@ public class ResourceItem {
         return name;
     }
 
+    public String getFolder() {
+        String fullPath = getPath();
+        return fullPath.substring(0, fullPath.length() - getName().length());
+    }
+
+    public String getOriginPath() {
+        return originPath.substring(5, originPath.length());
+    }
+
     public String getCreated() {
-        return created.substring(0,10) + " / " + created.substring(11,16);
+        return created.substring(0, 10) + " / " + created.substring(11, 16);
     }
 
     public String getModified() {
-        return modified.substring(0,10) + " / " + modified.substring(11,16);
+        return modified.substring(0, 10) + " / " + modified.substring(11, 16);
     }
 
     public String getFileURL() {
@@ -97,18 +114,19 @@ public class ResourceItem {
     public String getSize() {
         Double sizeF = this.size.doubleValue();
         String sizeClass = "Kb";
-        sizeF = sizeF/1024; //KiloBytes
-        if (sizeF >= 1024) {
-            sizeF = sizeF/1024; // MegaBytes
+        Double divisor = Double.valueOf("1024");
+        sizeF = sizeF / divisor; //KiloBytes
+        if (sizeF >= divisor) {
+            sizeF = sizeF / divisor; // MegaBytes
             sizeClass = "Mb";
 
         }
-        if (sizeF >= 1024) {
-            sizeF = sizeF/1024; //GigaBytes
+        if (sizeF >= divisor) {
+            sizeF = sizeF / divisor; //GigaBytes
             sizeClass = "Gb";
         }
 
-        return String.format(Locale.getDefault(), "%.2f", sizeF)+" "+sizeClass;
+        return String.format(Locale.getDefault(), "%.2f", sizeF) + " " + sizeClass;
     }
 
     public String getMedia_type() {

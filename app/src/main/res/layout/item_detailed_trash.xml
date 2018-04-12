@@ -25,7 +25,7 @@
         tools:text="TEST_FILENAME" />
 
     <Button
-        android:id="@+id/download"
+        android:id="@+id/restore"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_toEndOf="@+id/preview_detailed"
@@ -34,34 +34,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:textSize="15sp"
-        android:text="@string/download"
-        android:drawableStart="@mipmap/ic_file_download_black_24dp" />
+        android:text="@string/restore"
+        android:drawableStart="@mipmap/ic_restore_page_black_24dp" />
 
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/download"
-        android:layout_toEndOf="@+id/preview_detailed"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:textSize="15sp"
-        android:text = "@string/delete"
-        android:drawableStart="@mipmap/ic_delete_black_24dp" />
-
-    <Button
-        android:id="@+id/copy"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/delete"
-        android:textSize="15sp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:text="@string/make_copy"
-        android:layout_toEndOf="@+id/preview_detailed"
-        android:drawableStart="@mipmap/ic_insert_drive_file_black_24dp" />
 
 
     <TextView

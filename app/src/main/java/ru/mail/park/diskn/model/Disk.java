@@ -4,6 +4,7 @@ package ru.mail.park.diskn.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 /**
@@ -41,16 +42,58 @@ public class Disk {
         return user;
     }
 
-    public BigDecimal getUsedSpace() {
-        return usedSpace;
+    public String getUsedSpace() {
+        BigDecimal sizeF = this.usedSpace;
+        String sizeClass = "Kb";
+        BigDecimal divisor = new BigDecimal("1024");
+        sizeF = sizeF.divide(divisor, RoundingMode.CEILING); //KiloBytes
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // MegaBytes
+            sizeClass = "Mb";
+
+        }
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // GigaBytes
+            sizeClass = "Gb";
+
+        }
+        return sizeF.toString() + " " + sizeClass;
     }
 
-    public BigDecimal getTotalSpace() {
-        return totalSpace;
+    public String getTotalSpace() {
+        BigDecimal sizeF = this.totalSpace;
+        String sizeClass = "Kb";
+        BigDecimal divisor = new BigDecimal("1024");
+        sizeF = sizeF.divide(divisor, RoundingMode.CEILING); //KiloBytes
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // MegaBytes
+            sizeClass = "Mb";
+
+        }
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // GigaBytes
+            sizeClass = "Gb";
+
+        }
+        return sizeF.toString() + " " + sizeClass;
     }
 
-    public BigDecimal getTrashSize() {
-        return trashSize;
+    public String getTrashSize() {
+        BigDecimal sizeF = this.trashSize;
+        String sizeClass = "Kb";
+        BigDecimal divisor = new BigDecimal("1024");
+        sizeF = sizeF.divide(divisor, RoundingMode.CEILING); //KiloBytes
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // MegaBytes
+            sizeClass = "Mb";
+
+        }
+        if (sizeF.compareTo(divisor) > 0) {
+            sizeF = sizeF.divide(divisor, RoundingMode.CEILING); // GigaBytes
+            sizeClass = "Gb";
+
+        }
+        return sizeF.toString() + " " + sizeClass;
     }
 
     @Override
