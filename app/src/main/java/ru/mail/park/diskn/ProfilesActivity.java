@@ -31,7 +31,7 @@ public class ProfilesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profiles);
         SharedPreferences prefs = getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        //TODO check if logged in
+
         if (!prefs.getBoolean(KEY_IS_FIRST, true)) {
             startMainActivity();
         }

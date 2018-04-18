@@ -58,7 +58,6 @@ public class AccountFragment extends Fragment {
         Button logOutBtn = view.findViewById(R.id.log_out);
 
         logOutBtn.setOnClickListener(v -> {
-            //TODO
             if (getContext() != null) {
                 SharedPreferences prefs = getContext().getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -96,7 +95,7 @@ public class AccountFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Disk> call, Throwable t) {
-                //TODO
+
                 t.printStackTrace();
             }
         };

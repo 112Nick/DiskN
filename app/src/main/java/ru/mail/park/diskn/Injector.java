@@ -22,14 +22,14 @@ public class Injector {
 
     @SuppressLint("StaticFieldLeak") // application context - singleton
     private static Injector instance = null;
-    public final Picasso picasso ;
+    public final Picasso picasso;
     public final YandexApi yandexApi;
 
     private final SharedPreferences prefs;
 
 
     private Injector(Context context) {
-        Context context1 = context.getApplicationContext();
+        Context contextApp = context.getApplicationContext();
 
         this.prefs = context.getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
 
@@ -39,9 +39,9 @@ public class Injector {
                                 .addHeader("Authorization", "OAuth " + prefs.getString(KEY_OAUTH, "Can't read"))
                                 .build()))
                 .build();
-        this.picasso = new Picasso.Builder(context1)
+        this.picasso = new Picasso.Builder(contextApp)
                 .downloader(new OkHttp3Downloader(httpClient))
-                        .build();
+                .build();
 
         this.yandexApi = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -60,10 +60,4 @@ public class Injector {
             instance = new Injector(context);
         }
     }
-
-
-
-
-
-
 }

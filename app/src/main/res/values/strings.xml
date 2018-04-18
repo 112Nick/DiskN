@@ -14,9 +14,7 @@
     <string name="account">Account</string>
     <string name="about">About</string>
     <string name="account_name">Account: </string>
-    <string name="refresh">Refresh</string>
 
-    <string name="emptyList">This folder seems to be empty! </string>
     <string name="yandex">yandex</string>
     <string name="google">google</string>
 
@@ -36,6 +34,7 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="restore">restore</string>
+    <string name="empty_folder">The folder seems to be empty!</string>
 
 
 </resources>

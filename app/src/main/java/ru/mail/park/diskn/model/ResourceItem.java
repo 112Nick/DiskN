@@ -1,5 +1,8 @@
 package ru.mail.park.diskn.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Locale;
@@ -29,9 +32,7 @@ import java.util.Locale;
  * ----    comment_ids (CommentIds, optional): <Идентификаторы комментариев>
  */
 
-public class ResourceItem {
-    @SerializedName("resource_id")
-    private final String resourceId;
+public class ResourceItem implements Parcelable{
     @SerializedName("name")
     private final String name;
     @SerializedName("created")
@@ -50,12 +51,10 @@ public class ResourceItem {
     private final String preview;
     @SerializedName("path")
     private final String path;
-    @SerializedName("origin_path")
-    private final String originPath;
 
-    public ResourceItem(String resourceId, String name, String created, String path, String modified,
-                        String fileURL, Integer size, String media_type, String type, String preview, String originPath) {
-        this.resourceId = resourceId;
+
+    public ResourceItem(String name, String created, String path, String modified,
+                        String fileURL, Integer size, String media_type, String type, String preview) {
         this.name = name;
         this.created = created;
         this.modified = modified;
@@ -66,9 +65,35 @@ public class ResourceItem {
         this.type = type;
         this.preview = preview;
         this.path = path;
-        this.originPath = originPath;
-//        this.originPath = path.substring(5, path.length());
     }
+
+    private ResourceItem(Parcel in) {
+        name = in.readString();
+        created = in.readString();
+        modified = in.readString();
+        fileURL = in.readString();
+        if (in.readByte() == 0) {
+            size = null;
+        } else {
+            size = in.readInt();
+        }
+        media_type = in.readString();
+        type = in.readString();
+        preview = in.readString();
+        path = in.readString();
+    }
+
+    public static final Creator<ResourceItem> CREATOR = new Creator<ResourceItem>() {
+        @Override
+        public ResourceItem createFromParcel(Parcel in) {
+            return new ResourceItem(in);
+        }
+
+        @Override
+        public ResourceItem[] newArray(int size) {
+            return new ResourceItem[size];
+        }
+    };
 
     public String getPreview() {
         return preview;
@@ -82,9 +107,6 @@ public class ResourceItem {
 
     }
 
-    public String getResourceId() {
-        return resourceId;
-    }
 
     public String getName() {
         return name;
@@ -95,9 +117,6 @@ public class ResourceItem {
         return fullPath.substring(0, fullPath.length() - getName().length());
     }
 
-    public String getOriginPath() {
-        return originPath.substring(5, originPath.length());
-    }
 
     public String getCreated() {
         return created.substring(0, 10) + " / " + created.substring(11, 16);
@@ -133,11 +152,30 @@ public class ResourceItem {
         return media_type;
     }
 
-    private String getType() {
-        return type;
-    }
-
     public boolean isDirectory() {
         return type.equals("dir");
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(created);
+        dest.writeString(modified);
+        dest.writeString(fileURL);
+        if (size == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(size);
+        }
+        dest.writeString(media_type);
+        dest.writeString(type);
+        dest.writeString(preview);
+        dest.writeString(path);
     }
 }

@@ -1,20 +1,19 @@
 package ru.mail.park.diskn.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,16 +24,22 @@ import ru.mail.park.diskn.MainActivity;
 import ru.mail.park.diskn.R;
 import ru.mail.park.diskn.api.YandexApi;
 import ru.mail.park.diskn.model.FilesArr;
+import ru.mail.park.diskn.model.ResourceItem;
 
-public class FilesFragment extends Fragment {
+public class FilesFragment extends Fragment implements ItemDialogFragment.Delegate {
     private static final String PATH_EXTRA = "PATH_EXTRA";
     private static final String TYPE = "TYPE";
     private static final String TRASH = "trash";
+    private static final String TYPE_FILES = "files";
+
     private final YandexApi yandexApi = Injector.getInstance().yandexApi;
     private RecyclerView fileListView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar pBar;
     private String path;
     private String type;
+
+    private FileListAdapter adapter;
 
     public static FilesFragment newInstance(String path, String type) {
         FilesFragment firstFragment = new FilesFragment();
@@ -53,6 +58,8 @@ public class FilesFragment extends Fragment {
             path = arguments.getString(PATH_EXTRA);
             type = arguments.getString(TYPE);
         }
+        adapter = new FileListAdapter(getContext(), this::onResourceItemClick);
+
 
     }
 
@@ -82,27 +89,21 @@ public class FilesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         fileListView = view.findViewById(R.id.fileList);
         swipeRefreshLayout = view.findViewById(R.id.swipe);
-        if (getContext() != null) {
-            if(type.equals(TRASH)) {
-                getTrashResources();
-                FloatingActionButton deleteAll = view.findViewById(R.id.fab);
-                getTrashResources();
-                deleteAll.setOnClickListener(v -> {
-                    Log.d("CLEAR", "TRASH");
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                    //TODO warning
-                    View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.delete_confirm, null);
-                    dialogBuilder.setView(dialogView);
-                    AlertDialog dialog = dialogBuilder.create();
-                    Button yesBtn = dialogView.findViewById(R.id.confirm);
-                    Button noBtn = dialogView.findViewById(R.id.no_confirm);
-                    dialog.show();
+        pBar = view.findViewById(R.id.progressBar);
+        pBar.setVisibility(View.GONE);
 
-                    yesBtn.setOnClickListener(v1 -> {
-                        deleteAll();
-                        dialog.hide();
-                    });
-                    noBtn.setOnClickListener(v12 -> dialog.hide());
+
+        if (getContext() != null) {
+            if (type.equals(TRASH)) {
+                getTrashResources();
+                pBar.setVisibility(View.VISIBLE);
+                FloatingActionButton deleteAll = view.findViewById(R.id.fab);
+                deleteAll.setOnClickListener(v -> {
+                    if (getContext() != null) {
+                        FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                        DeleteConfirmDialogFragment deleteConfirmDialogFragment = DeleteConfirmDialogFragment.newInstance();
+                        deleteConfirmDialogFragment.show(manager, "confirm");
+                    }
 
                 });
                 if (getContext() != null) {
@@ -114,6 +115,7 @@ public class FilesFragment extends Fragment {
             } else {
 
                 getResourcesList();
+                pBar.setVisibility(View.VISIBLE);
                 if (getContext() != null) {
                     ((MainActivity) getContext()).setTitle(R.string.files_title);
                 }
@@ -125,22 +127,6 @@ public class FilesFragment extends Fragment {
 
     }
 
-    private void deleteAll() {
-
-        Callback<Void> callback = new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                getTrashResources();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                t.printStackTrace();
-            }
-
-        };
-        yandexApi.deleteAllFromTrash().enqueue(callback);
-    }
 
     private void getTrashResources() {
         Callback<FilesArr> callback = new Callback<FilesArr>() {
@@ -148,28 +134,26 @@ public class FilesFragment extends Fragment {
             @Override
             public void onResponse(Call<FilesArr> call, Response<FilesArr> response) {
                 fileListView.setLayoutManager(new LinearLayoutManager(getContext()));
-                final FileListAdapter adapter = new FileListAdapter(getContext(), type);
                 fileListView.setAdapter(adapter);
                 fileListView.setHasFixedSize(true);
+                pBar.setVisibility(View.GONE);
 
                 FilesArr body = response.body();
                 if (body != null) {
-//                    if (body.getEmbedded().getItems().isEmpty()) {
-//                        ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction()
-//                                .replace(R.id.container, EmptyFragment.newInstance())
-//                                .commit();
-//                    }
+                    if (body.getEmbedded().getItems().isEmpty()) {
+                        if (getContext() != null) {
+                            android.support.v4.app.FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                            EmptyFolderDialogFragment emptyFolderDialogFragment = EmptyFolderDialogFragment.newInstance();
+                            emptyFolderDialogFragment.show(manager, "empty");
+                        }
+                    }
+                    adapter.removeAll();
                     for (int i = body.getEmbedded().getItems().size() - 1; i >= 0; i--) {
                         fileListView.scrollToPosition(0);
                         adapter.add(body.getEmbedded().getItems().get(i));
                     }
                 }
-
-
                 swipeRefreshLayout.setRefreshing(false);
-
-//
-
             }
 
             @Override
@@ -187,21 +171,26 @@ public class FilesFragment extends Fragment {
             @Override
             public void onResponse(Call<FilesArr> call, Response<FilesArr> response) {
                 fileListView.setLayoutManager(new LinearLayoutManager(getContext()));
-                final FileListAdapter adapter = new FileListAdapter(getContext(), type);
                 fileListView.setAdapter(adapter);
                 fileListView.setHasFixedSize(true);
-
+                pBar.setVisibility(View.GONE);
                 FilesArr body = response.body();
                 if (body != null) {
+                    if (body.getEmbedded().getItems().isEmpty()) {
+                        if (getContext() != null) {
+                            android.support.v4.app.FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                            EmptyFolderDialogFragment emptyFolderDialogFragment = EmptyFolderDialogFragment.newInstance();
+                            emptyFolderDialogFragment.show(manager, "empty");
+                        }
+
+                    }
+                    adapter.removeAll();
                     for (int i = body.getEmbedded().getItems().size() - 1; i >= 0; i--) {
                         fileListView.scrollToPosition(0);
                         adapter.add(body.getEmbedded().getItems().get(i));
-//                        Log.d("PATH", body.getEmbedded().getItems().get(i).getFolder());
                     }
                 }
-
                 swipeRefreshLayout.setRefreshing(false);
-
             }
 
             @Override
@@ -214,6 +203,44 @@ public class FilesFragment extends Fragment {
         yandexApi.getResources(path).enqueue(callback);
     }
 
+    private void onResourceItemClick(ResourceItem resourceItem) {
+        if (resourceItem.isDirectory()) {
+            if (type.equals(TYPE_FILES)) {
+                requireFragmentManager().beginTransaction()
+                        .replace(R.id.container, FilesFragment.newInstance(resourceItem.getPath(), type))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        } else {
+            if (type.equals(TYPE_FILES)) {
+                FragmentManager manager = getChildFragmentManager();
+                ItemDialogFragment itemDialogFragment = ItemDialogFragment.newInstance(resourceItem, false);
+                itemDialogFragment.show(manager, "files");
+
+
+            } else {
+                FragmentManager manager = getChildFragmentManager();
+                ItemDialogFragment itemDialogFragment = ItemDialogFragment.newInstance(resourceItem, true);
+                itemDialogFragment.show(manager, "trash");
+
+            }
+        }
+    }
+
+    @Override
+    public void onDelete(ResourceItem resourceItem) {
+        adapter.remove(resourceItem);
+    }
+
+    @Override
+    public void onRestore(ResourceItem resourceItem) {
+        adapter.remove(resourceItem);
+    }
+
+    @Override
+    public void onMakeCopy(ResourceItem resourceItem) {
+        adapter.addToPosition(resourceItem);
+    }
 }
 
 

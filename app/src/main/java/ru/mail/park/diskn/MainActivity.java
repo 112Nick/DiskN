@@ -7,7 +7,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -22,11 +21,14 @@ import ru.mail.park.diskn.model.Disk;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private final YandexApi yandexApi =Injector.getInstance().yandexApi;
+    private final String TYPE_FILES = "files";
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String TYPE_TRASH = "trash";
+    private final String ROOT_PATH = "/";
+    private final YandexApi yandexApi = Injector.getInstance().yandexApi;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggleButton;
 
-    // TODO REQUEST_LOGIN_SDK = 0
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, FilesFragment.newInstance("/", "files"))
+                .replace(R.id.container, FilesFragment.newInstance(ROOT_PATH, TYPE_FILES))
                 .addToBackStack(null)
                 .commit();
 
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toggleButton.syncState();
 
-        ActionBar supportActionBar = getSupportActionBar();
+        ActionBar supportActionBar = getSupportActionBar(); // read
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -70,10 +72,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<Disk> call, Response<Disk> response) {
                 Disk body = response.body();
-                Log.d("MyTag", String.valueOf(body));
                 View navHeader = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
                 TextView displayName = navHeader.findViewById(R.id.display_name);
-//                TextView userLogin = navHeader.findViewById(R.id.login);
                 if (body != null) {
                     displayName.append(body.getUser().getDisplayName());
                 }
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<Disk> call, Throwable t) {
-                //TODO
+
                 t.printStackTrace();
             }
         };
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.files: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, FilesFragment.newInstance("/", "files"))
+                        .replace(R.id.container, FilesFragment.newInstance(ROOT_PATH, TYPE_FILES))
                         .addToBackStack(null)
                         .commit();
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             case R.id.trash: {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, FilesFragment.newInstance("/", "trash"))
+                        .replace(R.id.container, FilesFragment.newInstance(ROOT_PATH, TYPE_TRASH))
                         .addToBackStack(null)
                         .commit();
                 drawerLayout.closeDrawers();

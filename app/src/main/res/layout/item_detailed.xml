@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
 
     <ImageView
         android:id="@+id/preview_detailed"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:layout_marginBottom="10dp"
-        android:layout_margin="10dp"
         android:layout_below="@+id/filename_detailed"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/filename_detailed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/colorBlack"
         android:textSize="25sp"
         tools:text="TEST_FILENAME" />
@@ -28,40 +28,40 @@
         android:id="@+id/download"
         android:layout_width="160dp"
         android:layout_height="40dp"
-        android:layout_toEndOf="@+id/preview_detailed"
         android:layout_below="@id/filename_detailed"
-        android:layout_marginTop="7dp"
-        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textSize="15sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_toEndOf="@+id/preview_detailed"
+        android:drawableStart="@mipmap/ic_file_download_black_24dp"
         android:text="@string/download"
-        android:drawableStart="@mipmap/ic_file_download_black_24dp" />
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/delete"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_below="@+id/download"
-        android:layout_toEndOf="@+id/preview_detailed"
-        android:layout_marginTop="3dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:textSize="15sp"
-        android:text = "@string/delete"
-        android:drawableStart="@mipmap/ic_delete_black_24dp" />
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/preview_detailed"
+        android:drawableStart="@mipmap/ic_delete_black_24dp"
+        android:text="@string/delete"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/copy"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:layout_below="@+id/delete"
-        android:textSize="15sp"
-        android:layout_marginTop="3dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:text="@string/make_copy"
+        android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/preview_detailed"
-        android:drawableStart="@mipmap/ic_insert_drive_file_black_24dp" />
+        android:drawableStart="@mipmap/ic_insert_drive_file_black_24dp"
+        android:text="@string/make_copy"
+        android:textSize="15sp" />
 
 
     <TextView
@@ -70,42 +70,39 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/preview_detailed"
         android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        android:text="@string/media_type" />
+        android:text="@string/media_type"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/media_type"
-        android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        android:text="@string/size"/>
+        android:layout_marginTop="3dp"
+        android:text="@string/size"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/created"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/size"
-        android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
-        android:textSize="20sp"
-        android:text="@string/created_on"/>
+        android:layout_marginTop="3dp"
+        android:text="@string/created_on"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/modified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/created"
-        android:layout_marginTop="3dp"
-        android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
-        android:textSize="20sp"
-        android:text="@string/modified_on" />
-
-
-
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:text="@string/modified_on"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
