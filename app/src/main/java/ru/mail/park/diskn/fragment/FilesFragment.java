@@ -100,7 +100,7 @@ public class FilesFragment extends Fragment implements ItemDialogFragment.Delega
                 FloatingActionButton deleteAll = view.findViewById(R.id.fab);
                 deleteAll.setOnClickListener(v -> {
                     if (getContext() != null) {
-                        FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                        FragmentManager manager = requireFragmentManager();
                         DeleteConfirmDialogFragment deleteConfirmDialogFragment = DeleteConfirmDialogFragment.newInstance();
                         deleteConfirmDialogFragment.show(manager, "confirm");
                     }
@@ -142,7 +142,7 @@ public class FilesFragment extends Fragment implements ItemDialogFragment.Delega
                 if (body != null) {
                     if (body.getEmbedded().getItems().isEmpty()) {
                         if (getContext() != null) {
-                            android.support.v4.app.FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                            FragmentManager manager = requireFragmentManager();
                             EmptyFolderDialogFragment emptyFolderDialogFragment = EmptyFolderDialogFragment.newInstance();
                             emptyFolderDialogFragment.show(manager, "empty");
                         }
@@ -178,7 +178,7 @@ public class FilesFragment extends Fragment implements ItemDialogFragment.Delega
                 if (body != null) {
                     if (body.getEmbedded().getItems().isEmpty()) {
                         if (getContext() != null) {
-                            android.support.v4.app.FragmentManager manager = ((MainActivity) getContext()).getSupportFragmentManager();
+                            FragmentManager manager = requireFragmentManager();
                             EmptyFolderDialogFragment emptyFolderDialogFragment = EmptyFolderDialogFragment.newInstance();
                             emptyFolderDialogFragment.show(manager, "empty");
                         }

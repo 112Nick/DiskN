@@ -1,7 +1,6 @@
 package ru.mail.park.diskn;
 
 import android.app.Application;
-import android.os.StrictMode;
 
 /**
  * Created by nick on 15.03.18.
