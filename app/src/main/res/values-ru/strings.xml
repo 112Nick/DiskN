@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">DiskN</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="files_title">Файлы</string>
+    <string name="trash_title">Корзина</string>
+    <string name="account_title">Аккаунт</string>
+
+
+    <string name="files">Файлы</string>
+    <string name="trashBin">Корзина</string>
+    <string name="settings">Настройки</string>
+    <string name="account">Аккаунт</string>
+    <string name="about">Подробнее</string>
+    <string name="account_name">Аккаунт: </string>
+
+    <string name="yandex">Яндекс</string>
+    <string name="google">Гугл</string>
+
+    <string name="download">Скачать</string>
+    <string name="delete">Удалить</string>
+    <string name="make_copy">Копировать</string>
+    <string name="media_type">Тип:</string>
+    <string name="size">Размер:</string>
+    <string name="created_on">Создан:</string>
+    <string name="modified_on">Изменен:</string>
+    <string name="trash_size">Размер корзины:</string>
+    <string name="used_space">Занято:</string>
+    <string name="total_space">Общий объем:</string>
+    <string name="county">Страна:</string>
+    <string name="log_out">Выход</string>
+    <string name="confirm">Хотите очистить корзину?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="restore">Восстановить</string>
+    <string name="empty_folder">Кажется, папка пуста!</string>
+
+
+</resources>

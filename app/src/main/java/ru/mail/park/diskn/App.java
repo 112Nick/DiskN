@@ -19,10 +19,10 @@ public class App extends Application {
         super.onCreate();
         Injector.init(this);
 
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
+//        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                .detectAll()
+//                .penaltyLog()
+//                .build());
 
 //        app = this;
     }

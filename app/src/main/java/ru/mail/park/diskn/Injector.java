@@ -34,7 +34,8 @@ public class Injector {
         this.prefs = context.getSharedPreferences(STORAGE_NAME, MODE_PRIVATE);
 
         OkHttpClient httpClient = new OkHttpClient.Builder()
-                .addInterceptor(chain -> chain.proceed(
+                .addInterceptor(chain ->
+                        chain.proceed(
                         chain.request().newBuilder()
                                 .addHeader("Authorization", "OAuth " + prefs.getString(KEY_OAUTH, "Can't read"))
                                 .build()))

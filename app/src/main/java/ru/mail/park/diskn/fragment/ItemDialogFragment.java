@@ -70,7 +70,7 @@ public class ItemDialogFragment extends DialogFragment {
             resourceItem = arguments.getParcelable(ITEM);
             isTrash = arguments.getBoolean(IS_TRASH);
         }
-
+//        this.getDialog().getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
